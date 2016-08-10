@@ -1,4 +1,15 @@
+import random
 from collections import Counter
+
+
+def random_max(counter):
+    items = sorted(
+        counter.items(),
+        key=lambda x: x[1],
+        reverse=True,
+        )
+    max_count = items[0][1]
+    return random.choice([k for (k,v) in items if v >= max_count])
 
 
 class GoodNode:
@@ -9,17 +20,15 @@ class GoodNode:
 
     @property
     def message(self):
-        most_common = self.counter.most_common(1)
-        if not most_common:
+        if not self.counter:
             return None
-        msg, _ = most_common[0]
-        return msg
+        return random_max(self.counter)
 
     def broadcast(self):
         msg = self.message
         if msg is None:
             return
-        print('good %d broadcasting %s' % (self.id, self.message))
+        print('good %d broadcasting %s %r' % (self.id, self.message, self.counter))
         for node in self.links:
             yield node, msg
 
@@ -40,7 +49,6 @@ class BadNode:
 
     def update(self, msg):
         pass
-
 
 
 def simulate(n_good, n_bad, has_knowledge, time):
