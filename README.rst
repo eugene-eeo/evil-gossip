@@ -7,6 +7,7 @@ using a gossip protocol.
 
 - the target is to get all good nodes to agree that some value ``v``
   is the correct message, within a number of ticks ``t``.
+- all nodes broadcast at the same time each tick.
 - internally each node keeps a counter of messages.
 - upon receiving a new message it will bump the corresponding entry in
   the counter.
