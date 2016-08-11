@@ -15,6 +15,8 @@ Options:
     --full               fully connect nodes
 """
 
+from __future__ import print_function
+
 import statistics as stats
 from concurrent.futures import ProcessPoolExecutor
 from functools import partial
@@ -32,7 +34,7 @@ def task(args):
         n_evil=args['n_evil'],
         has_knowledge=args['has_knowledge'],
         dist=full_dist if args['full'] else partial(sparse_dist, p=args['p']),
-        t=int(args['t']),
+        t=args['t'],
     )
 
 
