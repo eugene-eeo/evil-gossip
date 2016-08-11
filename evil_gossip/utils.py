@@ -13,19 +13,18 @@ def random_max(counter):
     return random.choice([k for (k,v) in items if v >= max_count])
 
 
-def sparse_dist(xs, p=0.25):
-    links = set()
-    for node in xs:
-        for other in xs:
-            if other is node:
-                continue
-            links.add(frozenset([node, other]))
+def edges(xs):
+    for index, a in enumerate(xs, 1):
+        for b in xs[index:]:
+            yield (a, b)
 
-    values = defaultdict(set)
-    for node, other in links:
+
+def sparse_dist(xs, p=0.25):
+    values = defaultdict(list)
+    for node, other in edges(xs):
         if random.random() <= p:
-            values[node].add(other)
-            values[other].add(node)
+            values[node].append(other)
+            values[other].append(node)
     return values.items()
 
 
