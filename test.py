@@ -38,7 +38,7 @@ def task(args):
 
 def main():
     args = docopt(__doc__)
-    repeats = int(args['--repeats'])
+    repeats = int(args['--repeats']) if not args['--full'] else 1
     bar = tqdm(total=repeats)
     res = []
 
