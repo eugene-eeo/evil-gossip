@@ -19,12 +19,18 @@ def edges(xs):
             yield (a, b)
 
 
-def sparse_dist(xs, p=0.25):
+def prob(p):
+    while True:
+        yield random.random() <= p
+
+
+def sparse_dist(xs, entropy=prob(0.25)):
     values = defaultdict(list)
-    for node, other in edges(xs):
-        if random.random() <= p:
-            values[node].append(other)
-            values[other].append(node)
+    for ok, (node, other) in zip(entropy, edges(xs)):
+        if not ok:
+            continue
+        values[node].append(other)
+        values[other].append(node)
     return values.items()
 
 
