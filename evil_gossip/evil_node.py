@@ -5,9 +5,11 @@ class EvilNode:
         self.links = links
 
     def broadcast(self):
-        print('Evil [%s] broadcasting %s' % (self.id, self.message))
         for node in self.links:
             yield node, self.message
 
     def update(self, msg):
         pass
+
+    def __repr__(self):
+        return '<Evil(%i) %r>' % (self.id, [n.id for n in self.links])

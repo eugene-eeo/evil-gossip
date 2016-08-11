@@ -18,9 +18,11 @@ class GoodNode:
         msg = self.message
         if msg is None:
             return
-        print('Good [%s] broadcasting %s (%r)' % (self.id, msg, self.counter))
         for node in self.links:
             yield node, msg
+
+    def __repr__(self):
+        return '<Good(%i) %r>' % (self.id, [n.id for n in self.links])
 
     def update(self, messages):
         self.counter.update(messages)

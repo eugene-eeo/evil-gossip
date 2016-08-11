@@ -1,21 +1,22 @@
 from collections import defaultdict
 from .good_node import GoodNode
 from .evil_node import EvilNode
+from .utils import sparse_dist, full_dist
 
 
-def simulate(n_good, n_evil, has_knowledge, t):
+def simulate(n_good, n_evil, has_knowledge, t, dist=sparse_dist):
     v = 0
 
     good = [GoodNode(id, [])    for id in range(n_good)]
-    evil = [EvilNode(id, 1, []) for id in range(n_evil)]
+    evil = [EvilNode(id+n_good, 1, []) for id in range(n_evil)]
 
     knowledgable = good[:has_knowledge]
     for node in knowledgable:
         node.update([v])
 
-    all_nodes = good + evil
-    for node in all_nodes:
-        node.links += all_nodes
+    for node, links in dist(good + evil):
+        node.links = links
+        print(node)
 
     while t > 0:
         mailbox = defaultdict(list)
