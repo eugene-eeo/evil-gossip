@@ -1,5 +1,4 @@
 from collections import Counter
-from .utils import random_max
 
 
 class GoodNode:
@@ -12,7 +11,8 @@ class GoodNode:
     def message(self):
         if not self.counter:
             return None
-        return random_max(self.counter)
+        message, _ = self.counter.most_common(1)[0]
+        return message
 
     def broadcast(self):
         msg = self.message

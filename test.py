@@ -13,14 +13,15 @@ Options:
     --repeats=<n>        no. of repeats [default: 100]
 """
 
+import statistics as stats
 from concurrent.futures import ProcessPoolExecutor
 from functools import partial
 from itertools import repeat
 
 from docopt import docopt
-from progressbar import ProgressBar
+from tqdm import tqdm
 from evil_gossip import simulate
-from evil_gossip.utils import sparse_dist, full_dist, prob
+from evil_gossip.utils import sparse_dist, full_dist
 
 
 def task(args):
@@ -28,7 +29,7 @@ def task(args):
         n_good=int(args['--good']),
         n_evil=int(args['--evil']),
         has_knowledge=int(args['--has-knowledge']),
-        dist=partial(sparse_dist, entropy=prob(0.5)),
+        dist=sparse_dist,
         t=int(args['--t']),
     )
 
@@ -36,15 +37,39 @@ def task(args):
 def main():
     args = docopt(__doc__)
     repeats = int(args['--repeats'])
-    bar = ProgressBar(max_value=repeats)
+    bar = tqdm(total=repeats)
     res = []
 
-    with ProcessPoolExecutor() as executor:
-        for rep, rv in zip(range(repeats), executor.map(task, repeat(args, repeats))):
-            res.append(rv)
-            bar.update(rep + 1)
+    task_args = {
+        'n_good': int(args['--good']),
+        'n_evil': int(args['--evil']),
+        'has_knowledge': int(args['--has-knowledge']),
+        'dist':   partial(sparse_dist, p=0.25),
+        't':      int(args['--t']),
+    }
 
-    print(res)
+    with ProcessPoolExecutor() as executor:
+        for rv in executor.map(task, repeat(args, repeats)):
+            res.append(rv)
+            bar.update(1)
+    bar.close()
+
+    success = 0
+    failed  = 0
+    ticks   = []
+
+    for ok, req in res:
+        if ok:
+            success += 1
+            ticks.append(req)
+        else:
+            failed += 1
+
+    print()
+    print('  failed:    ', failed)
+    print('  successful:', success)
+    print('  mean ticks:', stats.mean(ticks))
+    print()
 
 
 if __name__ == '__main__':
