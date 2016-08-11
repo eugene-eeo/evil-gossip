@@ -1,4 +1,4 @@
 from evil_gossip import simulate
 
 
-print(simulate(10, 11, 9, 100))
+print(simulate(10, 4, 5, 100))
