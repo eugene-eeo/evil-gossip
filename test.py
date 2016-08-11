@@ -40,7 +40,6 @@ def main():
     args = docopt(__doc__)
     repeats = int(args['--repeats']) if not args['--full'] else 1
     bar = tqdm(total=repeats)
-    res = []
 
     task_args = {
         'n_good': int(args['--good']),
@@ -51,22 +50,20 @@ def main():
         't':      int(args['--t']),
     }
 
-    with ProcessPoolExecutor() as executor:
-        for rv in executor.map(task, repeat(task_args, repeats)):
-            res.append(rv)
-            bar.update(1)
-    bar.close()
-
     success = 0
     failed  = 0
     ticks   = []
 
-    for ok, req in res:
-        if ok:
-            success += 1
-            ticks.append(req)
-        else:
-            failed += 1
+    with ProcessPoolExecutor() as executor:
+        for rv in executor.map(task, repeat(task_args, repeats)):
+            ok, req = rv
+            if ok:
+                success += 1
+                ticks.append(req)
+            else:
+                failed += 1
+            bar.update(1)
+    bar.close()
 
     print()
     print('  failed:    ', failed)
