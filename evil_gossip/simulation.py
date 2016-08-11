@@ -17,6 +17,7 @@ def simulate(n_good, n_evil, has_knowledge, t, dist=sparse_dist):
     for node, links in dist(good + evil):
         node.links = links
 
+    T = t
     while t > 0:
         mailbox = defaultdict(list)
         good_senders = 0
@@ -34,7 +35,7 @@ def simulate(n_good, n_evil, has_knowledge, t, dist=sparse_dist):
                 good_senders += 1
 
         if good_senders == n_good and all_correct:
-            return (True, t)
+            return (True, T - t)
 
         for node in evil:
             for node, message in node.broadcast():
