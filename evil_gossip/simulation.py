@@ -22,6 +22,7 @@ def simulate(n_good, n_evil, has_knowledge, t, dist=sparse_dist):
         mailbox = defaultdict(list)
         good_senders = 0
         all_correct = True
+        all_wrong = True
 
         # `.update` operation is commutative, so whether good
         # or evil nodes broadcast first does not affect results.
@@ -31,11 +32,15 @@ def simulate(n_good, n_evil, has_knowledge, t, dist=sparse_dist):
                 has_sent = True
                 mailbox[node].append(message)
                 all_correct &= message == v
+                all_wrong   &= message != v
             if has_sent:
                 good_senders += 1
 
-        if good_senders == n_good and all_correct:
-            return (True, T - t)
+        if good_senders == n_good:
+            if all_correct:
+                return (True, T - t)
+            if all_wrong:
+                break
 
         for node in evil:
             for node, message in node.broadcast():
