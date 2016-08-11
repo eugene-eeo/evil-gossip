@@ -7,8 +7,8 @@ from .utils import sparse_dist, full_dist
 def simulate(n_good, n_evil, has_knowledge, t, dist=sparse_dist):
     v = 0
 
-    good = [GoodNode(id, [])    for id in range(n_good)]
-    evil = [EvilNode(id+n_good, 1, []) for id in range(n_evil)]
+    good = [GoodNode(id) for id in range(n_good)]
+    evil = [EvilNode(id+n_good, 1) for id in range(n_evil)]
 
     knowledgable = good[:has_knowledge]
     for node in knowledgable:

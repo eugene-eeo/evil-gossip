@@ -1,8 +1,8 @@
 class EvilNode:
-    def __init__(self, id, message, links):
+    def __init__(self, id, message):
         self.id = id
         self.message = message
-        self.links = links
+        self.links = None
 
     def broadcast(self):
         for node in self.links:

@@ -5,8 +5,8 @@ a simulation to find out which model - fully or sparsely connected provides
 better tolerance against multiple adversaries who can actively publish messages
 using a gossip protocol.
 
-* the target is to get all good nodes to agree that some value ``v``
-  is the correct message, within a number of ticks ``t``.
+* target: get all good nodes to agree that some value ``v`` is the correct
+  message, within a number of ticks ``t``.
 * all nodes broadcast at the same time each tick.
 * good nodes:
 

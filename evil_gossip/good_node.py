@@ -3,10 +3,10 @@ from .utils import random_max
 
 
 class GoodNode:
-    def __init__(self, id, links):
+    def __init__(self, id):
         self.id = id
         self.counter = Counter()
-        self.links = links
+        self.links = None
 
     @property
     def message(self):
