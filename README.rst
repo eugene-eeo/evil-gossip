@@ -36,6 +36,6 @@ usage
 todo
 ~~~~
 
-* write some tests
 * write more tests
+* use hypothesis to test functions and do integration tests
 * generate nice graphs and PDFs
