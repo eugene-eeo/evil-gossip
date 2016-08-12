@@ -19,12 +19,15 @@ Options:
 from __future__ import print_function, division
 
 import statistics as stats
+from collections import Counter
 from concurrent.futures import ProcessPoolExecutor
 from functools import partial
 from itertools import repeat
 
 from docopt import docopt
 from tqdm import tqdm
+from tabulate import tabulate
+
 from evil_gossip import simulate
 from evil_gossip.utils import sparse_dist, full_dist
 
@@ -42,11 +45,12 @@ def task(args):
 def main():
     args = docopt(__doc__)
     repeats = int(args['--repeats']) if not args['--full'] else 1
+    print()
     bar = tqdm(
         total=repeats,
         ascii=False,
+        bar_format='  repeats: {bar} {n_fmt}/{total_fmt} ({rate_fmt}) [{elapsed}]  ',
         smoothing=1,
-        leave=False,
         )
 
     task_args = {
@@ -76,9 +80,14 @@ def main():
     print()
     print('  failed:    ', failed, '({}%)'.format(100 * failed / repeats))
     print('  successful:', success, '({}%)'.format(100 * success / repeats))
-    print('  mean ticks:', stats.mean(ticks) if len(ticks) > 0 else '-')
-    print('  variance:  ', stats.pvariance(ticks) if len(ticks) > 1 else '-')
+    print('  mean ticks:', stats.mean(ticks) if ticks else '-')
+    print('  variance:  ', stats.pvariance(ticks) if ticks else '-')
     print()
+
+    if ticks:
+        c = Counter(ticks)
+        print(tabulate(sorted(c.items()), ['ticks', '#'], tablefmt='simple'))
+        print()
 
 
 if __name__ == '__main__':
