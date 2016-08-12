@@ -20,8 +20,8 @@ def sparse_dist(xs, p=0.25, entropy=random.random):
 
 
 def full_dist(xs):
-    for node in xs:
-        yield node, xs
+    for i, node in enumerate(xs):
+        yield node, xs[:i] + xs[i+1:]
 
 
 def argmax(counter):
