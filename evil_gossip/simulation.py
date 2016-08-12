@@ -1,6 +1,5 @@
 from collections import defaultdict, Counter
-from .good_node import GoodNode
-from .evil_node import EvilNode
+from .node import GoodNode, EvilNode
 
 
 def broadcast(node, mailbox):
