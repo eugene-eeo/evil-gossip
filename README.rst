@@ -33,6 +33,17 @@ usage
     $ ./evil-gossip --help
 
 
+dev
+~~~
+
+.. code-block:: shell
+
+    $ git clone ssh://git@github.com/eugene-eeo/evil-gossip.git
+    $ cd evil-gossip
+    $ vim
+    $ nosetests
+
+
 todo
 ~~~~
 

@@ -18,7 +18,6 @@ Options:
 
 from __future__ import print_function, division
 
-import statistics as stats
 from collections import Counter
 from concurrent.futures import ProcessPoolExecutor
 from functools import partial
@@ -80,9 +79,6 @@ def main():
     print()
     print('      ok:', success, '({}%)'.format(100 * success / repeats))
     print('    fail:', failed, '({}%)'.format(100 * failed / repeats))
-    print('    mean:', stats.mean(ticks) if ticks else '-')
-    print('  median:', stats.median(ticks) if ticks else '-')
-    print('   stdev:', stats.pstdev(ticks) if ticks else '-')
     print()
 
     if ticks:

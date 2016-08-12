@@ -9,6 +9,6 @@ cpython:
 
 
 pypy:
-	# pypy3 and 2 doesn't ship with statistics.
-	pip install statistics futures
+	# pypy 2 doesn't ship with futures
+	pip install futures
 	make cpython

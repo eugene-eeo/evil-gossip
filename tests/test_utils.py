@@ -1,5 +1,5 @@
 from collections import Counter
-from evil_gossip.utils import edges, full_dist, argmax
+from evil_gossip.utils import edges, full_dist, argmax, sparse_dist
 
 
 def test_argmax():
