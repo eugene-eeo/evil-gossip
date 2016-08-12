@@ -17,8 +17,24 @@ using a gossip protocol.
 
 * evil nodes:
 
-  * can send whatever they want.
+  * only send a different message ``!= v``.
 
 * once only ``v`` is in circulation (by the good nodes) then the good
   nodes have won.
 * else if ``t`` is used up before the previous condition they have lost.
+
+
+usage
+~~~~~
+
+.. code-block:: shell
+
+    $ ./evil-gossip --help
+
+
+todo
+~~~~
+
+* write some tests
+* write more tests
+* generate nice graphs and PDFs
