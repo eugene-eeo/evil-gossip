@@ -1,7 +1,6 @@
 from collections import defaultdict, Counter
 from .good_node import GoodNode
 from .evil_node import EvilNode
-from .utils import sparse_dist, full_dist
 
 
 def simulate(n_good, n_evil, has_knowledge, dist, t):
