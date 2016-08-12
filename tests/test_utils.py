@@ -31,14 +31,3 @@ def test_sparse_dist(xs):
     for a in d:
         for b in d[a]:
             assert a in d[b]
-
-
-def test_sparse_dist():
-    s = sparse_dist([1, 2, 3], entropy=lambda: 0)
-    f = full_dist([1, 2, 3])
-    assert {k: set(v) for k, v in s} == {k: set(v) for k, v in f}
-
-
-def test_sparse_dist_entropy():
-    s = sparse_dist([1, 2, 3], entropy=lambda: 1)
-    assert dict(s) == {}

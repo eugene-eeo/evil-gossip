@@ -41,7 +41,7 @@ dev
     $ git clone ssh://git@github.com/eugene-eeo/evil-gossip.git
     $ cd evil-gossip
     $ vim
-    $ nosetests
+    $ make test
 
 
 todo
