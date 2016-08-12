@@ -11,13 +11,12 @@ using a gossip protocol.
 * good nodes:
 
   * keeps an internal counter of messages.
-  * upon receiving a new message it will bump the corresponding entry in
-    the counter.
-  * will only send the message with the highest count.
+  * will bump the corresponding entry in the counter upon receiving.
+  * always sends the message with the highest count.
 
 * evil nodes:
 
-  * only send a different message ``!= v``.
+  * always sends a different message ``!= v``.
 
 * once only ``v`` is in circulation (by the good nodes) then the good
   nodes have won.
@@ -29,6 +28,8 @@ usage
 
 .. code-block:: shell
 
+    # install dependencies
+    $ make cpython   # or if you're feeling brave: make pypy
     $ ./evil-gossip --help
 
 
