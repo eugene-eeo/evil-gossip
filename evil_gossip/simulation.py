@@ -25,18 +25,15 @@ def simulate(n_good, n_evil, has_knowledge, dist, t):
         all_correct = True
         all_wrong = True
 
-        # `.update` operation is commutative, so whether good
-        # or evil nodes broadcast first does not affect results.
         for node in good:
             message = broadcast(node, mailbox)
-            if message is not None:
-                all_correct &= message == v
-                all_wrong &= message != v
-                continue
-            else:
+            if message is None:
                 all_wrong = False
                 all_correct = False
                 all_sent = False
+                continue
+            all_correct &= message == v
+            all_wrong &= message != v
 
         if all_sent:
             if all_correct:
