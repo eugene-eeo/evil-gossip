@@ -1,8 +1,5 @@
 from collections import Counter
-
-
-def argmax(counter):
-    return counter.most_common(1)[0][0]
+from .utils import argmax
 
 
 class GoodNode:

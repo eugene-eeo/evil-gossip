@@ -21,3 +21,7 @@ def sparse_dist(xs, p=0.25, entropy=random.random):
 def full_dist(xs):
     for node in xs:
         yield node, xs
+
+
+def argmax(counter):
+    return counter.most_common(1)[0][0]
