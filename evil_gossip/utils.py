@@ -4,9 +4,10 @@ from collections import defaultdict
 
 
 def edges(xs):
+    length = len(xs)
     for index, a in enumerate(xs, 1):
-        for b in xs[index:]:
-            yield (a, b)
+        for j in range(index, length):
+            yield a, xs[j]
 
 
 def sparse_dist(xs, p=0.25, entropy=random.random):
