@@ -45,8 +45,9 @@ def main():
     bar = tqdm(
         total=repeats,
         ascii=False,
-        bar_format=' {n_fmt}/{total_fmt} {bar} {rate_fmt} ',
+        bar_format=' Repeats: {bar} {rate_fmt} {n_fmt}/{total_fmt} ',
         smoothing=1,
+        leave=False,
         )
 
     task_args = {
