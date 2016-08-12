@@ -2,18 +2,18 @@
 """
 Usage:
     evil-gossip -h | --help
-    evil-gossip [--good=<n>] [--evil=<n>] [--has-knowledge=<n>] [--t=<n>]
+    evil-gossip [--good=<n>] [--evil=<n>] [--knowledge=<n>] [--t=<n>]
         [--repeats=<n>] [--full | --sparse=<p>]
 
 Options:
-    --good=<n>           no. of good nodes [default: 100]
-    --evil=<n>           no. of evil nodes [default: 10]
-    --has-knowledge=<n>  no. of good nodes with knowledge [default: 10]
-    -h, --help           show this screen
-    --t=<n>              ticks [default: 10]
-    --repeats=<n>        no. of repeats [default: 100]
-    --sparse=<p>         sparse connections [default: 0.25]
-    --full               fully connect nodes
+    --good=<n>       no. of good nodes [default: 100]
+    --evil=<n>       no. of evil nodes [default: 10]
+    --knowledge=<n>  no. of good nodes with knowledge [default: 10]
+    -h, --help       show this screen
+    --t=<n>          ticks [default: 10]
+    --repeats=<n>    no. of repeats [default: 100]
+    --sparse=<p>     sparse connections [default: 0.25]
+    --full           fully connect nodes
 """
 
 from __future__ import print_function, division
@@ -48,14 +48,14 @@ def main():
     bar = tqdm(
         total=repeats,
         ascii=False,
-        bar_format='  repeats: {bar} {n_fmt}/{total_fmt} ({rate_fmt}) [{elapsed}]  ',
+        bar_format='  repeats: {bar} {n_fmt}/{total_fmt} [{elapsed}]  ',
         smoothing=1,
         )
 
     task_args = {
         'n_good': int(args['--good']),
         'n_evil': int(args['--evil']),
-        'has_knowledge': int(args['--has-knowledge']),
+        'has_knowledge': int(args['--knowledge']),
         'full':   args['--full'],
         'p':      None if args['--full'] else float(args['--sparse']),
         't':      int(args['--t']),
@@ -77,8 +77,8 @@ def main():
     bar.close()
 
     print()
-    print('      ok:', success, '({}%)'.format(100 * success / repeats))
-    print('    fail:', failed, '({}%)'.format(100 * failed / repeats))
+    print('    ok:', success, '({}%)'.format(100 * success / repeats))
+    print('  fail:', failed, '({}%)'.format(100 * failed / repeats))
     print()
 
     if ticks:
