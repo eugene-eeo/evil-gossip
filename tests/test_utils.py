@@ -4,12 +4,15 @@ import hypothesis.strategies as st
 from evil_gossip.utils import edges, full_dist, argmax, sparse_dist
 
 
+unique_integers = st.lists(st.integers(), unique=True)
+
+
 def test_argmax():
     assert argmax(Counter(a=2, b=3)) == 'b'
     assert argmax(Counter(a=1, b=1, c=0)) in ['a', 'b']
 
 
-@given(st.lists(st.integers(), unique=True))
+@given(unique_integers)
 def test_full_dist(xs):
     x = set(xs)
     for u, v in full_dist(xs):
@@ -17,7 +20,7 @@ def test_full_dist(xs):
         assert {u} | set(v) == x
 
 
-@given(st.lists(st.integers(), unique=True))
+@given(unique_integers)
 def test_edges_property(xs):
     v = list(edges(xs))
     s = set(frozenset([a, b]) for a, b in v)
@@ -25,7 +28,7 @@ def test_edges_property(xs):
 
 
 
-@given(st.lists(st.integers(), unique=True))
+@given(unique_integers)
 def test_sparse_dist(xs):
     d = dict(sparse_dist(xs))
     for a in d:
