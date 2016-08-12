@@ -78,11 +78,11 @@ def main():
     bar.close()
 
     print()
-    print('  failed:      ', failed, '({}%)'.format(100 * failed / repeats))
-    print('  successful:  ', success, '({}%)'.format(100 * success / repeats))
-    print('  mean ticks:  ', stats.mean(ticks) if ticks else '-')
-    print('  median ticks:', stats.median(ticks) if ticks else '-')
-    print('  variance:    ', stats.pvariance(ticks) if ticks else '-')
+    print('      ok:', success, '({}%)'.format(100 * success / repeats))
+    print('    fail:', failed, '({}%)'.format(100 * failed / repeats))
+    print('    mean:', stats.mean(ticks) if ticks else '-')
+    print('  median:', stats.median(ticks) if ticks else '-')
+    print('   stdev:', stats.pstdev(ticks) if ticks else '-')
     print()
 
     if ticks:
