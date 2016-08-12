@@ -12,12 +12,9 @@ def broadcast(node, mailbox):
 
 def simulate(n_good, n_evil, has_knowledge, dist, t):
     v = 0
-    good = [GoodNode() for _ in range(n_good)]
+    good = [GoodNode() for _ in range(n_good - has_knowledge)]
+    good.extend(GoodNode.with_knowledge(v) for _ in range(has_knowledge))
     evil = [EvilNode(1) for _ in range(n_evil)]
-
-    knowledgable = good[:has_knowledge]
-    for node in knowledgable:
-        node.update([v])
 
     for node, links in dist(good + evil):
         node.links = links

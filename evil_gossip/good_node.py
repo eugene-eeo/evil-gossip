@@ -24,7 +24,7 @@ class GoodNode:
         self.ready |= bool(len(self.counter))
 
     @classmethod
-    def with_knowledge(cls, messsage):
+    def with_knowledge(cls, message):
         node = cls()
         node.update([message])
         return node
