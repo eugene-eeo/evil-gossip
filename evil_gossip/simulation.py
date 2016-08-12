@@ -3,6 +3,13 @@ from .good_node import GoodNode
 from .evil_node import EvilNode
 
 
+def broadcast(node, mailbox):
+    message = None
+    for recv, message in node.broadcast():
+        mailbox[recv][message] += 1
+    return message
+
+
 def simulate(n_good, n_evil, has_knowledge, dist, t):
     v = 0
     good = [GoodNode() for _ in range(n_good)]
@@ -18,31 +25,31 @@ def simulate(n_good, n_evil, has_knowledge, dist, t):
     T = t
     mailbox = defaultdict(Counter)
     while t > 0:
-        good_senders = 0
+        all_sent = True
         all_correct = True
         all_wrong = True
 
         # `.update` operation is commutative, so whether good
         # or evil nodes broadcast first does not affect results.
         for node in good:
-            has_sent = False
-            for node, message in node.broadcast():
-                has_sent = True
-                mailbox[node][message] += 1
+            message = broadcast(node, mailbox)
+            if message is not None:
                 all_correct &= message == v
                 all_wrong &= message != v
-            if has_sent:
-                good_senders += 1
+                continue
+            else:
+                all_wrong = False
+                all_correct = False
+                all_sent = False
 
-        if good_senders == n_good:
+        if all_sent:
             if all_correct:
                 return (True, T-t)
             if all_wrong:
                 break
 
         for node in evil:
-            for node, message in node.broadcast():
-                mailbox[node][message] += 1
+            broadcast(node, mailbox)
 
         for node, messages in mailbox.items():
             node.update(messages)

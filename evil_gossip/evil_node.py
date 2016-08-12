@@ -11,6 +11,3 @@ class EvilNode:
 
     def update(self, messages):
         pass
-
-    def __repr__(self):
-        return 'Evil(%r)' % ([n.id for n in self.links],)
