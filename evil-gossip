@@ -16,7 +16,7 @@ Options:
     --full               fully connect nodes
 """
 
-from __future__ import print_function
+from __future__ import print_function, division
 
 import statistics as stats
 from concurrent.futures import ProcessPoolExecutor
@@ -45,7 +45,6 @@ def main():
     bar = tqdm(
         total=repeats,
         ascii=False,
-        bar_format=' Repeats: {bar} {rate_fmt} {n_fmt}/{total_fmt} ',
         smoothing=1,
         leave=False,
         )
@@ -60,8 +59,8 @@ def main():
     }
 
     success = 0
-    failed  = 0
-    ticks   = []
+    failed = 0
+    ticks = []
 
     with ProcessPoolExecutor() as executor:
         for rv in executor.map(task, repeat(task_args, repeats)):
@@ -75,7 +74,7 @@ def main():
     bar.close()
 
     print()
-    print('  failed:    ', failed,  '({}%)'.format(100 * failed  / repeats))
+    print('  failed:    ', failed, '({}%)'.format(100 * failed / repeats))
     print('  successful:', success, '({}%)'.format(100 * success / repeats))
     print('  mean ticks:', stats.mean(ticks) if len(ticks) > 0 else '-')
     print('  variance:  ', stats.pvariance(ticks) if len(ticks) > 1 else '-')

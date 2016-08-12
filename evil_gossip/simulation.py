@@ -31,7 +31,7 @@ def simulate(n_good, n_evil, has_knowledge, dist, t):
                 has_sent = True
                 mailbox[node].append(message)
                 all_correct &= message == v
-                all_wrong   &= not all_correct
+                all_wrong &= message != v
             if has_sent:
                 good_senders += 1
 
