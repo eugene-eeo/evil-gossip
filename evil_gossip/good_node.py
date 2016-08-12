@@ -2,8 +2,9 @@ from collections import Counter
 
 
 class GoodNode:
-    def __init__(self, id):
-        self.id = id
+    __slots__ = ('counter', 'links')
+
+    def __init__(self):
         self.counter = Counter()
         self.links = []
 
@@ -22,7 +23,7 @@ class GoodNode:
             yield node, msg
 
     def __repr__(self):
-        return 'Good(%i, %r)' % (self.id, [n.id for n in self.links])
+        return 'Good(%r)' % ([n.id for n in self.links],)
 
     def update(self, messages):
         self.counter.update(messages)

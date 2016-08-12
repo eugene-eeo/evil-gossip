@@ -41,7 +41,12 @@ def task(args):
 def main():
     args = docopt(__doc__)
     repeats = int(args['--repeats']) if not args['--full'] else 1
-    bar = tqdm(total=repeats)
+    bar = tqdm(
+        total=repeats,
+        ascii=False,
+        bar_format=' {n_fmt}/{total_fmt} {bar} {rate_fmt} ',
+        smoothing=1,
+        )
 
     task_args = {
         'n_good': int(args['--good']),
@@ -68,9 +73,10 @@ def main():
     bar.close()
 
     print()
-    print('  failed:    ', failed)
-    print('  successful:', success)
+    print('  failed:    ', failed,  '({}%)'.format(100 * failed  / repeats))
+    print('  successful:', success, '({}%)'.format(100 * success / repeats))
     print('  mean ticks:', stats.mean(ticks) if len(ticks) > 0 else '-')
+    print('  variance:  ', stats.pvariance(ticks) if len(ticks) > 1 else '-')
     print()
 
 

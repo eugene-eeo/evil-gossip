@@ -9,10 +9,10 @@ def edges(xs):
             yield (a, b)
 
 
-def sparse_dist(xs, p=0.25):
+def sparse_dist(xs, p=0.25, entropy=random.random):
     values = defaultdict(list)
     for node, other in edges(xs):
-        if random.random() <= p:
+        if entropy() <= p:
             values[node].append(other)
             values[other].append(node)
     return values.items()

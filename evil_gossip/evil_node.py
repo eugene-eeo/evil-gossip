@@ -1,6 +1,7 @@
 class EvilNode:
-    def __init__(self, id, message):
-        self.id = id
+    __slots__ = ('message', 'links')
+
+    def __init__(self, message):
         self.message = message
         self.links = []
 
@@ -12,4 +13,4 @@ class EvilNode:
         pass
 
     def __repr__(self):
-        return 'Evil(%i, %r)' % (self.id, [n.id for n in self.links])
+        return 'Evil(%r)' % ([n.id for n in self.links],)

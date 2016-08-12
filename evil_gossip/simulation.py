@@ -4,11 +4,10 @@ from .evil_node import EvilNode
 from .utils import sparse_dist, full_dist
 
 
-def simulate(n_good, n_evil, has_knowledge, t, dist=sparse_dist):
+def simulate(n_good, n_evil, has_knowledge, dist, t):
     v = 0
-
-    good = [GoodNode(id) for id in range(n_good)]
-    evil = [EvilNode(id+n_good, 1) for id in range(n_evil)]
+    good = [GoodNode() for _ in range(n_good)]
+    evil = [EvilNode(1) for _ in range(n_evil)]
 
     knowledgable = good[:has_knowledge]
     for node in knowledgable:
@@ -32,13 +31,13 @@ def simulate(n_good, n_evil, has_knowledge, t, dist=sparse_dist):
                 has_sent = True
                 mailbox[node].append(message)
                 all_correct &= message == v
-                all_wrong   &= message != v
+                all_wrong   &= not all_correct
             if has_sent:
                 good_senders += 1
 
         if good_senders == n_good:
             if all_correct:
-                return (True, T - t)
+                return (True, T-t)
             if all_wrong:
                 break
 
