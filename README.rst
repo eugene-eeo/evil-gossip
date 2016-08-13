@@ -30,7 +30,7 @@ usage
 
     # install dependencies
     $ make cpython   # or if you're feeling brave: make pypy
-    $ ./evil-gossip --help
+    $ ./evil-gossip
 
 
 dev
@@ -47,6 +47,5 @@ dev
 todo
 ~~~~
 
-* high level module for easy generation
 * use hypothesis to test functions and do integration tests
 * generate nice graphs and PDFs
