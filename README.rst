@@ -47,6 +47,6 @@ dev
 todo
 ~~~~
 
-* write more tests
+* high level module for easy generation
 * use hypothesis to test functions and do integration tests
 * generate nice graphs and PDFs

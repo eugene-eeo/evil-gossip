@@ -1,91 +1,11 @@
 #!/usr/bin/env python
-"""
-Usage:
-    evil-gossip -h | --help
-    evil-gossip [--good=<n>] [--evil=<n>] [--knowledge=<n>] [--t=<n>]
-        [--repeats=<n>] [--full | --sparse=<p>]
-
-Options:
-    --good=<n>       no. of good nodes [default: 100]
-    --evil=<n>       no. of evil nodes [default: 10]
-    --knowledge=<n>  no. of good nodes with knowledge [default: 10]
-    -h, --help       show this screen
-    --t=<n>          ticks [default: 10]
-    --repeats=<n>    no. of repeats [default: 100]
-    --sparse=<p>     sparse connections [default: 0.25]
-    --full           fully connect nodes
-"""
-
-from __future__ import print_function, division
-
-from collections import Counter
-from concurrent.futures import ProcessPoolExecutor
-from functools import partial
-from itertools import repeat
-
-from docopt import docopt
-from tqdm import tqdm
-from tabulate import tabulate
-
-from evil_gossip import simulate
-from evil_gossip.utils import sparse_dist, full_dist
+from high_level import multiples_of, run
 
 
-def task(args):
-    return simulate(
-        n_good=args['n_good'],
-        n_evil=args['n_evil'],
-        has_knowledge=args['has_knowledge'],
-        dist=full_dist if args['full'] else partial(sparse_dist, p=args['p']),
-        t=args['t'],
-    )
-
-
-def main():
-    args = docopt(__doc__)
-    repeats = int(args['--repeats']) if not args['--full'] else 1
-    print()
-    bar = tqdm(
-        total=repeats,
-        ascii=False,
-        bar_format='  repeats: {bar} {n_fmt}/{total_fmt} [{elapsed}]  ',
-        smoothing=1,
-        )
-
-    task_args = {
-        'n_good': int(args['--good']),
-        'n_evil': int(args['--evil']),
-        'has_knowledge': int(args['--knowledge']),
-        'full':   args['--full'],
-        'p':      None if args['--full'] else float(args['--sparse']),
-        't':      int(args['--t']),
-    }
-
-    success = 0
-    failed = 0
-    ticks = []
-
-    with ProcessPoolExecutor() as executor:
-        for rv in executor.map(task, repeat(task_args, repeats)):
-            ok, req = rv
-            if ok:
-                success += 1
-                ticks.append(req)
-            else:
-                failed += 1
-            bar.update(1)
-    bar.close()
-
-    print()
-    print('    ok:', success, '({}%)'.format(100 * success / repeats))
-    print('  fail:', failed, '({}%)'.format(100 * failed / repeats))
-    print()
-
-    if ticks:
-        c = Counter(ticks)
-        print(tabulate(sorted(c.items()), ['ticks', '#'], tablefmt='simple'))
-        print()
-
-
-if __name__ == '__main__':
-    main()
+run(
+    n_good=multiples_of(50, 100, 5),
+    n_evil=multiples_of(10, 20, 1),
+    has_knowledge=multiples_of(0, 30, 1),
+    prob=multiples_of(0, 1, 0.2),
+    t=[200],
+)
