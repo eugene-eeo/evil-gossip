@@ -54,16 +54,18 @@ def run(n_good, n_evil, has_knowledge, prob, t, repeats=1000):
     with ProcessPoolExecutor() as executor:
         for param in tasks(n_good, n_evil, has_knowledge, prob, t):
             reps = 1 if param['p'] == 1.0 else repeats
-            T = Counter()
+            dist = Counter()
             passed = 0
             failed = 0
-            for (ok, ticks) in executor.map(execute, repeat(param, reps)):
+            for ok, ticks in executor.map(execute, repeat(param, reps)):
                 if ok:
                     passed += 1
-                    T.update([ticks])
+                    dist[ticks] += 1
                 else:
                     failed += 1
-            param['ticks_distribution'] = T
-            param['passed'] = passed
-            param['failed'] = failed
+            param.update({
+                'ticks_distribution': dist,
+                'passed': passed,
+                'failed': failed,
+            })
             j(param)
