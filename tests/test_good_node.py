@@ -27,7 +27,4 @@ def test_with_knowledge():
 def test_broadcast():
     node = GoodNode.with_knowledge(1)
     node.links = [1, 2]
-    assert dict(node.broadcast()) == {
-        1: 1,
-        2: 1,
-    }
+    assert node.broadcast() == (1, [1, 2])

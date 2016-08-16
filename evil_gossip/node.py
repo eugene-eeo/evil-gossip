@@ -13,8 +13,8 @@ class GoodNode:
     def broadcast(self):
         if self.ready:
             message = argmax(self.counter)
-            for node in self.links:
-                yield node, message
+            return message, self.links
+        return None, ()
 
     def update(self, messages):
         self.counter.update(messages)
@@ -35,8 +35,7 @@ class EvilNode:
         self.links = []
 
     def broadcast(self):
-        for node in self.links:
-            yield node, self.message
+        return self.message, self.links
 
     def update(self, messages):
         pass

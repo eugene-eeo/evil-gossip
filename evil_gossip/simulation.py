@@ -3,10 +3,12 @@ from .node import GoodNode, EvilNode
 
 
 def broadcast(node, mailbox):
-    message = None
-    for recv, message in node.broadcast():
-        mailbox[recv][message] += 1
-    return message
+    message, receivers = node.broadcast()
+    if receivers:
+        for recv in receivers:
+            mailbox[recv][message] += 1
+        return message
+    return None
 
 
 def simulate(n_good, n_evil, has_knowledge, dist, t):
