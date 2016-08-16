@@ -18,7 +18,7 @@ class GoodNode:
 
     def update(self, messages):
         self.counter.update(messages)
-        self.ready |= bool(len(self.counter))
+        self.ready |= bool(self.counter)
 
     @classmethod
     def with_knowledge(cls, message):
