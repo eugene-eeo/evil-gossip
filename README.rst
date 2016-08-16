@@ -47,5 +47,5 @@ dev
 todo
 ~~~~
 
-* use hypothesis to test functions and do integration tests
 * generate nice graphs and PDFs
+* rewrite in Go just for fun
