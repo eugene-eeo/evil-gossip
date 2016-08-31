@@ -28,8 +28,6 @@ usage
 
 .. code-block:: shell
 
-    # install dependencies
-    $ make cpython   # or if you're feeling brave: make pypy
     $ ./evil-gossip
 
 
@@ -41,11 +39,9 @@ dev
     $ git clone ssh://git@github.com/eugene-eeo/evil-gossip.git
     $ cd evil-gossip
     $ vim
-    $ make test
 
 
 todo
 ~~~~
 
 * generate nice graphs and PDFs
-* rewrite in Go just for fun
