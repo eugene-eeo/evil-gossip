@@ -1,5 +1,8 @@
 package gossip
 
+import "math/rand"
+import "time"
+
 type Params struct {
 	Good         uint
 	Evil         uint
@@ -41,17 +44,19 @@ func broadcast(node Node, mailbox map[Node]map[bool]uint) bool {
 	message, targets := node.Broadcast()
 	for _, v := range targets {
 		if mailbox[v] == nil {
-			mailbox[v] = make(map[bool]uint)
+			mailbox[v] = map[bool]uint{message: 1}
+		} else {
+			mailbox[v][message]++
 		}
-		mailbox[v][message]++
 	}
 	return message
 }
 
 func RunSimulation(params Params) (uint, bool) {
+	r := rand.New(rand.NewSource(time.Now().Unix()))
 	good_nodes := allocateGood(params.Good, params.HasKnowledge)
 	evil_nodes := allocateEvil(params.Evil)
-	mapping := DistEdges(combine(good_nodes, evil_nodes), params.P)
+	mapping := DistEdges(combine(good_nodes, evil_nodes), params.P, r)
 	for node, peers := range mapping {
 		node.SetPeers(peers)
 	}

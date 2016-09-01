@@ -24,7 +24,7 @@ func asyncSimulate(src <-chan *gossip.Params, dst chan<- Result) {
 }
 
 func startSimulation(p *gossip.Params, reps uint) <-chan Result {
-	jobs := make(chan *gossip.Params)
+	jobs := make(chan *gossip.Params, reps)
 	sink := make(chan Result, reps)
 	for i := 0; i < 4; i++ {
 		go asyncSimulate(jobs, sink)

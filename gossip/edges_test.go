@@ -12,6 +12,7 @@ import (
 type Params struct {
 	Nodes []gossip.Node
 	P     float64
+	R     *rand.Rand
 }
 
 func (self Params) Generate(rand *rand.Rand, size int) reflect.Value {
@@ -20,6 +21,7 @@ func (self Params) Generate(rand *rand.Rand, size int) reflect.Value {
 		nodes = append(nodes, gossip.NewGoodNode())
 	}
 	return reflect.ValueOf(Params{
+		R:     rand,
 		P:     rand.Float64(),
 		Nodes: nodes,
 	})
@@ -36,7 +38,7 @@ func makeSet(nodes []gossip.Node) mapset.Set {
 func TestDistEdges(t *testing.T) {
 	assertion := func(x Params) bool {
 		n := makeSet(x.Nodes)
-		m := gossip.DistEdges(x.Nodes, x.P)
+		m := gossip.DistEdges(x.Nodes, x.P, x.R)
 		for node, peers := range m {
 			p := makeSet(peers)
 			if p.Contains(node) || !p.IsSubset(n) {
