@@ -46,7 +46,7 @@ func (self *GoodNode) Broadcast() (bool, []Node) {
 	if self.Ready {
 		return argmax(self.counter), self.peers
 	}
-	return true, []Node{}
+	return false, []Node{}
 }
 
 func (self *GoodNode) SetPeers(peers []Node) {

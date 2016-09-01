@@ -1,5 +1,13 @@
 package gossip
 
+type Params struct {
+	Good uint
+	Evil uint
+	HasKnowledge uint
+	Ticks uint
+	P float64
+}
+
 func allocateGood(good, has_knowledge uint) (pool []*GoodNode) {
 	for i := uint(1); i <= good; i++ {
 		node := NewGoodNode()
@@ -40,16 +48,16 @@ func broadcast(node Node, mailbox map[Node]map[bool]uint) bool {
 	return message
 }
 
-func RunSimulation(good, evil, has_knowledge uint, p float64, ticks uint) (uint, bool) {
-	good_nodes := allocateGood(good, has_knowledge)
-	evil_nodes := allocateEvil(evil)
-	mapping := DistEdges(combine(good_nodes, evil_nodes), p)
+func RunSimulation(params Params) (uint, bool) {
+	good_nodes := allocateGood(params.Good, params.HasKnowledge)
+	evil_nodes := allocateEvil(params.Evil)
+	mapping := DistEdges(combine(good_nodes, evil_nodes), params.P)
 	for node, peers := range mapping {
 		node.SetPeers(peers)
 	}
 
 	t := uint(0)
-	for t < ticks {
+	for t < params.Ticks {
 		t++
 		all_sent := true
 		all_ok := true
