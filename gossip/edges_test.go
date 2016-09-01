@@ -1,17 +1,17 @@
 package gossip_test
 
 import (
-	"github.com/eugene-eeo/evil-gossip/gossip"
 	"github.com/deckarep/golang-set"
+	"github.com/eugene-eeo/evil-gossip/gossip"
 	"math/rand"
+	"reflect"
 	"testing"
 	"testing/quick"
-	"reflect"
 )
 
 type Params struct {
 	Nodes []gossip.Node
-	P float64
+	P     float64
 }
 
 func (self Params) Generate(rand *rand.Rand, size int) reflect.Value {
@@ -20,7 +20,7 @@ func (self Params) Generate(rand *rand.Rand, size int) reflect.Value {
 		nodes = append(nodes, gossip.NewGoodNode())
 	}
 	return reflect.ValueOf(Params{
-		P: rand.Float64(),
+		P:     rand.Float64(),
 		Nodes: nodes,
 	})
 }

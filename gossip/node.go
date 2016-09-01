@@ -8,15 +8,15 @@ type Node interface {
 
 type GoodNode struct {
 	counter map[bool]uint
-	peers []Node
-	Ready bool
+	peers   []Node
+	Ready   bool
 }
 
 func NewGoodNode() *GoodNode {
 	return &GoodNode{
 		counter: make(map[bool]uint),
-		peers: []Node{},
-		Ready: false,
+		peers:   []Node{},
+		Ready:   false,
 	}
 }
 

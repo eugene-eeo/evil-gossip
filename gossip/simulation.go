@@ -1,11 +1,11 @@
 package gossip
 
 type Params struct {
-	Good uint
-	Evil uint
+	Good         uint
+	Evil         uint
 	HasKnowledge uint
-	Ticks uint
-	P float64
+	Ticks        uint
+	P            float64
 }
 
 func allocateGood(good, has_knowledge uint) (pool []*GoodNode) {
