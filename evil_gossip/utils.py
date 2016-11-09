@@ -11,12 +11,12 @@ def edges(xs):
 
 
 def sparse_dist(xs, p=0.25, entropy=random.random):
-    values = defaultdict(list)
+    links = defaultdict(list)
     for node, other in edges(xs):
         if entropy() <= p:
-            values[node].append(other)
-            values[other].append(node)
-    return values.items()
+            links[node].append(other)
+            links[other].append(node)
+    return links.items()
 
 
 def full_dist(xs):

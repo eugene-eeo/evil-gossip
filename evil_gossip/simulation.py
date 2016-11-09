@@ -20,9 +20,8 @@ def simulate(n_good, n_evil, has_knowledge, dist, t):
     for node, links in dist(good + evil):
         node.links = links
 
-    T = t
     mailbox = defaultdict(Counter)
-    while t > 0:
+    for i in range(t):
         all_sent = True
         all_correct = True
         all_wrong = True
@@ -41,7 +40,7 @@ def simulate(n_good, n_evil, has_knowledge, dist, t):
 
         if all_sent:
             if all_correct:
-                return (True, T-t)
+                return (True, i)
             if all_wrong:
                 break
 
@@ -51,6 +50,5 @@ def simulate(n_good, n_evil, has_knowledge, dist, t):
         for node, messages in mailbox.items():
             node.update(messages)
 
-        t -= 1
         mailbox.clear()
     return (False, 0)
