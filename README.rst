@@ -7,7 +7,7 @@ using a gossip protocol.
 
 * target: get all good nodes to agree that some value ``v`` is the correct
   message, within a number of ticks ``t``.
-* all nodes broadcast at the same time each tick.
+* all nodes (good and evil) broadcast at the same time each tick.
 * good nodes:
 
   * keeps an internal counter of messages.
@@ -17,10 +17,12 @@ using a gossip protocol.
 * evil nodes:
 
   * always sends a different message ``!= v``.
+  * in this implementation the potency of the evil nodes is necessarily
+    maximised as they all send the identical evil message.
 
 * once only ``v`` is in circulation (by the good nodes) then the good
   nodes have won.
-* else if ``t`` is used up before the previous condition they have lost.
+* else once ``t`` is used up they have lost.
 
 
 usage

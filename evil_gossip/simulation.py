@@ -32,8 +32,7 @@ def simulate(n_good, n_evil, has_knowledge, dist, t):
                 all_wrong = False
                 all_correct = False
                 all_sent = False
-                continue
-            if message == v:
+            elif message == v:
                 all_wrong = False
             else:
                 all_correct = False
