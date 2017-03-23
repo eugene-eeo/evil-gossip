@@ -77,11 +77,13 @@ def simulate(proposers, acceptors, t=500):
     mailbox = defaultdict(Counter)
     for i in range(1, t+1):
         #A = []
+        all_sent = True
         all_good = True
         all_evil = True
 
         for node in acceptors:
             m = broadcast(node, mailbox)
+            all_sent &= m is not None
             all_evil &= m == EVIL_MSG
             all_good &= m == GOOD_MSG
             #A.append(m)
@@ -93,6 +95,7 @@ def simulate(proposers, acceptors, t=500):
         mailbox.clear()
         #assert all_good == all(m == GOOD_MSG for m in A)
         #assert all_evil == all(m == EVIL_MSG for m in A)
-        if all_good: return True, i
-        if all_evil: return False, i
+        if all_sent:
+            if all_good: return True, i
+            if all_evil: return False, i
     return False, t
