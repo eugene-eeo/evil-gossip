@@ -43,8 +43,14 @@ def full_dist(xs):
 
 
 def sparse_dist(xs, p, entropy=random.random):
+    p2 = p / 2.0
+    links = defaultdict(list)
     for node, peers in full_dist(xs):
-        yield node, [p for p in peers if entropy() <= p]
+        for peer in peers:
+            if entropy() <= p2:
+                links[node].append(peer)
+                links[peer].append(node)
+    return links.items()
 
 
 def allocate(N, K, B):
@@ -54,8 +60,8 @@ def allocate(N, K, B):
     return B, N
 
 
-def add_links(nodes):
-    for node, peers in full_dist(nodes):
+def add_links(source):
+    for node, peers in source:
         node.peers = peers
 
 
@@ -77,13 +83,11 @@ def simulate(proposers, acceptors, t=500):
     mailbox = defaultdict(Counter)
     for i in range(1, t+1):
         #A = []
-        all_sent = True
         all_good = True
         all_evil = True
 
         for node in acceptors:
             m = broadcast(node, mailbox)
-            all_sent &= m is not None
             all_evil &= m == EVIL_MSG
             all_good &= m == GOOD_MSG
             #A.append(m)
@@ -95,7 +99,7 @@ def simulate(proposers, acceptors, t=500):
         mailbox.clear()
         #assert all_good == all(m == GOOD_MSG for m in A)
         #assert all_evil == all(m == EVIL_MSG for m in A)
-        if all_sent:
-            if all_good: return True, i
-            if all_evil: return False, i
+        #assert (all_good or all_evil) == all(m != None for m in A)
+        if all_good: return True, i
+        if all_evil: return False, i
     return False, t
