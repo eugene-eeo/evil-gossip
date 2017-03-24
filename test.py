@@ -1,15 +1,12 @@
 import json
-from evil_gossip import add_links, simulate, full_dist, \
-        sparse_dist, allocate
+from evil_gossip import run
 
 
-full = full_dist
-sparse = lambda p: (lambda xs: sparse_dist(xs, p))
 dump = lambda k: print(json.dumps(k))
 
 N = 100
 K = 25
-t = 1000
+t = 2000
 conditions = [
     (1.0, 10, 1),
     (1.0, 20, 1),
@@ -39,9 +36,6 @@ conditions = [
 
 dump(['p', 'B', 'ok', 'ticks'])
 for p, B, repeats in conditions:
-    dist = full if p == 1.0 else sparse(p)
     for _ in range(repeats):
-        P, A = allocate(N, K, B)
-        add_links(dist(P + A))
-        ok, ticks = simulate(P, A, t)
+        ok, ticks = run(N, K, B, p, t)
         dump([p, B, ok, ticks])

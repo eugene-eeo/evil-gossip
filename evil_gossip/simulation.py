@@ -1,40 +1,10 @@
 import random
 from collections import Counter, defaultdict
+from .node import Acceptor, Proposer
 
 
 GOOD_MSG = True
 EVIL_MSG = False
-
-
-def argmax(c):
-    key, _ = c.most_common(1)[0]
-    return key
-
-
-class Acceptor:
-    def __init__(self):
-        self.peers = []
-        self.counter = Counter()
-
-    def broadcast(self):
-        if self.counter:
-            return argmax(self.counter), self.peers
-        return None, []
-
-    def update(self, messages):
-        self.counter.update(messages)
-
-
-class Proposer:
-    def __init__(self, value):
-        self.peers = []
-        self.value = value
-
-    def broadcast(self):
-        return self.value, self.peers
-
-    def update(self, _):
-        pass
 
 
 class Gaplist:
@@ -89,7 +59,7 @@ def simulate(proposers, acceptors, t=1000):
     mailbox = defaultdict(Counter)
     for i in range(1, t+1):
         assert not mailbox
-        A = []
+        #A = []
         all_good = True
         all_evil = True
 
@@ -97,26 +67,26 @@ def simulate(proposers, acceptors, t=1000):
             m = broadcast(node, mailbox)
             all_evil &= m == EVIL_MSG
             all_good &= m == GOOD_MSG
-            A.append(m)
+            #A.append(m)
 
         for node in proposers:
             broadcast(node, mailbox)
 
         send_all(mailbox)
         mailbox.clear()
-        assert all_good == all(m == GOOD_MSG for m in A)
-        assert all_evil == all(m == EVIL_MSG for m in A)
-        if all_good or all_evil: assert all(m != None for m in A)
+        #assert all_good == all(m == GOOD_MSG for m in A)
+        #assert all_evil == all(m == EVIL_MSG for m in A)
+        #if all_good or all_evil: assert all(m != None for m in A)
         if all_good: return True, i
         if all_evil: return False, i
-    return convergence_check(acceptors), t
+    return False, t
 
 
-def convergence_check(acceptors):
+def convergence_check(good, evil, acceptors):
     good_count = 0
     evil_count = 0
     for node in acceptors:
         m, _ = node.broadcast()
         if m == GOOD_MSG: good_count += 1
         if m == EVIL_MSG: evil_count += 1
-    return good_count > evil_count
+    return (good + good_count) > (evil + evil_count)
