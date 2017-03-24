@@ -1,16 +1,20 @@
 """
 Usage:
-  test.py [--no-header]
+  test.py [--no-header] [--debug]
   test.py (-h | --help)
 
 Options:
   -h --help    Show this text.
   --no-header  Skip JSONL headers.
+  --debug      Show time taken for simulations.
 """
 
 import sys
 import json
-from evil_gossip import run
+import time
+import evil_gossip
+import itertools
+from concurrent.futures import ProcessPoolExecutor
 from docopt import docopt
 
 
@@ -60,13 +64,26 @@ conditions = [
 ]
 
 
+def run_simulation(params):
+    return evil_gossip.run(*params)
+
+
 def main(args):
     if not args['--no-header']:
         dump(['p', 'B', 'immediate', 'ok'])
-    for p, B, repeats in conditions:
-        for _ in range(repeats):
-            is_immediate, ok = run(N, K, B, p, t)
-            dump([p, B, is_immediate, ok])
+    with ProcessPoolExecutor() as exe:
+        for p, B, repeats in conditions:
+            start = time.time()
+            results = exe.map(run_simulation, itertools.repeat(
+                (N, K, B, p, t),
+                repeats,
+                ))
+            for is_immediate, ok in results:
+                dump([p, B, is_immediate, ok])
+            end = time.time()
+            dt = end - start
+            sys.stderr.write('p=%r B=%r t=%r\n' % (p, B, dt))
+            sys.stderr.flush()
 
 
 if __name__ == '__main__':

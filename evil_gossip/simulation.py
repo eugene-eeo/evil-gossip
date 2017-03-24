@@ -8,6 +8,8 @@ EVIL_MSG = False
 
 
 class Gaplist:
+    __slots__ = ('xs', 'hole')
+
     def __init__(self, xs, hole):
         self.xs = xs
         self.hole = hole
