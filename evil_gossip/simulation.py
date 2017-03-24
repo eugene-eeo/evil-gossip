@@ -44,7 +44,7 @@ def broadcast(node, mailbox):
     message, peers = node.broadcast()
     if message is not None:
         for p in peers:
-            #assert p is not node
+            # assert p is not node
             mailbox[p][message] += 1
         return message
     return None
@@ -59,7 +59,7 @@ def simulate(proposers, acceptors, t=1000):
     mailbox = defaultdict(Counter)
     for i in range(1, t+1):
         assert not mailbox
-        #A = []
+        # A = []
         all_good = True
         all_evil = True
 
@@ -67,26 +67,24 @@ def simulate(proposers, acceptors, t=1000):
             m = broadcast(node, mailbox)
             all_evil &= m == EVIL_MSG
             all_good &= m == GOOD_MSG
-            #A.append(m)
+            # A.append(m)
 
         for node in proposers:
             broadcast(node, mailbox)
 
         send_all(mailbox)
         mailbox.clear()
-        #assert all_good == all(m == GOOD_MSG for m in A)
-        #assert all_evil == all(m == EVIL_MSG for m in A)
-        #if all_good or all_evil: assert all(m != None for m in A)
+        # assert all_good == all(m == GOOD_MSG for m in A)
+        # assert all_evil == all(m == EVIL_MSG for m in A)
+        # if all_good or all_evil: assert all(m != None for m in A)
         if all_good: return True, i
         if all_evil: return False, i
     return False, t
 
 
 def convergence_check(good, evil, acceptors):
-    good_count = 0
-    evil_count = 0
     for node in acceptors:
         m, _ = node.broadcast()
-        if m == GOOD_MSG: good_count += 1
-        if m == EVIL_MSG: evil_count += 1
-    return (good + good_count) > (evil + evil_count)
+        if m == GOOD_MSG: good += 1
+        if m == EVIL_MSG: evil += 1
+    return good > evil

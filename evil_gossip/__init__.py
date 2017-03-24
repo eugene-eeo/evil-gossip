@@ -9,7 +9,6 @@ def run(neutral, good, evil, p, t):
         sparse_dist(P + A, p)
         )
     win, ticks = simulate(P, A, t)
-    return (
-       (convergence_check(good, evil, A), t) if not win and ticks == t else
-       (win, ticks)
-       )
+    if not win and ticks == t:
+        return False, convergence_check(good, evil, A)
+    return True, win
