@@ -37,20 +37,25 @@ class Proposer:
         pass
 
 
+class Gaplist:
+    def __init__(self, xs, hole):
+        self.xs = xs
+        self.hole = hole
+
+    def __iter__(self):
+        for item in self.xs:
+            if item != self.hole:
+                yield item
+
+
 def full_dist(xs):
-    for i, v in enumerate(xs):
-        yield v, xs[:i] + xs[i+1:]
+    for v in xs:
+        yield v, Gaplist(xs, v)
 
 
 def sparse_dist(xs, p, entropy=random.random):
-    p2 = p / 2.0
-    links = defaultdict(list)
-    for node, peers in full_dist(xs):
-        for peer in peers:
-            if entropy() <= p2:
-                links[node].append(peer)
-                links[peer].append(node)
-    return links.items()
+    for v, peers in full_dist(xs):
+        yield v, [n for n in peers if entropy() <= p]
 
 
 def allocate(N, K, B):
@@ -79,10 +84,11 @@ def update_all(mailbox):
         receiver.update(mailbox[receiver])
 
 
-def simulate(proposers, acceptors, t=500):
+def simulate(proposers, acceptors, t=1000):
     mailbox = defaultdict(Counter)
     for i in range(1, t+1):
         #A = []
+        mailbox.clear()
         all_good = True
         all_evil = True
 
@@ -96,10 +102,19 @@ def simulate(proposers, acceptors, t=500):
             broadcast(node, mailbox)
 
         update_all(mailbox)
-        mailbox.clear()
         #assert all_good == all(m == GOOD_MSG for m in A)
         #assert all_evil == all(m == EVIL_MSG for m in A)
         #assert (all_good or all_evil) == all(m != None for m in A)
         if all_good: return True, i
         if all_evil: return False, i
-    return False, t
+    return convergence_check(acceptors), t
+
+
+def convergence_check(acceptors):
+    good_count = 0
+    evil_count = 0
+    for node in acceptors:
+        m, _ = node.broadcast()
+        if m == GOOD_MSG: good_count += 1
+        if m == EVIL_MSG: evil_count += 1
+    return good_count > evil_count

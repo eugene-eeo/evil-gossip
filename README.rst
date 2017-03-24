@@ -23,12 +23,12 @@ using a gossip protocol.
 
 * once only ``v`` is in circulation (by the neutral nodes) then the good
   nodes have won.
-* once ``t`` is used up they have lost.
+* once ``t`` is used up, they have lost.
 
 default parameters:
 
 * **0 < p ≤ 1.0** (p = prob. of a link between two nodes)
-* **K = 10** (K = no. of good nodes)
+* **K = 25** (K = no. of good nodes)
 * **N = 100** (N = no. of neutral nodes)
 * **10 ≤ B ≤ 50** (B = no. of evil nodes)
 * **t = 500**
