@@ -1,12 +1,15 @@
 """
 Usage:
-  test.py [--no-header] [--debug]
+  test.py [--no-header] [--debug] [-r n] [-p p] [-b B]
   test.py (-h | --help)
 
 Options:
   -h --help    Show this text.
   --no-header  Skip JSONL headers.
   --debug      Show time taken for simulations.
+  -r n         No. of repeats [default: 50]
+  -p p         Prob of links. [default: 1.0,0.001,0.05,0.01,0.1,0.5,0.9,0.99]
+  -b B         No. of evil nodes [default: 10,20,30,40,50]
 """
 
 import sys
@@ -25,59 +28,16 @@ def dump(k):
 N = 100
 K = 25
 t = 2000
-conditions = [
-    (1.0, 10, 1),
-    (1.0, 20, 1),
-    (1.0, 30, 1),
-    (1.0, 40, 1),
-    (1.0, 50, 1),
-
-    (0.001, 10, 50),
-    (0.001, 20, 50),
-    (0.001, 30, 50),
-    (0.001, 40, 50),
-    (0.001, 50, 50),
-
-    (0.05, 10, 50),
-    (0.05, 20, 50),
-    (0.05, 30, 50),
-    (0.05, 40, 50),
-    (0.05, 50, 50),
-
-    (0.01, 10, 50),
-    (0.01, 20, 50),
-    (0.01, 30, 50),
-    (0.01, 40, 50),
-    (0.01, 50, 50),
-
-    (0.1, 10, 50),
-    (0.1, 20, 50),
-    (0.1, 30, 50),
-    (0.1, 40, 50),
-    (0.1, 50, 50),
-
-    (0.5, 10, 50),
-    (0.5, 20, 50),
-    (0.5, 30, 50),
-    (0.5, 40, 50),
-    (0.5, 50, 50),
-
-    (0.9, 10, 50),
-    (0.9, 20, 50),
-    (0.9, 30, 50),
-    (0.9, 40, 50),
-    (0.9, 50, 50),
-
-    (0.99, 10, 50),
-    (0.99, 20, 50),
-    (0.99, 30, 50),
-    (0.99, 40, 50),
-    (0.99, 50, 50),
-]
 
 
 def run_simulation(params):
     return evil_gossip.run(*params)
+
+
+def generate_conditions(repeats, probs, n_evil):
+    for p in probs:
+        for B in n_evil:
+            yield (p, B, 1 if p == 1.0 else repeats)
 
 
 def main(args):
@@ -85,6 +45,12 @@ def main(args):
     show_header = not args['--no-header']
     if show_header:
         dump(['p', 'B', 'immediate', 'ok'])
+
+    repeats = int(args['-r'])
+    probs   = [float(n) for n in args['-p'].split(',')]
+    n_evil  = [int(n) for n in args['-b'].split(',')]
+    conditions = generate_conditions(repeats, probs, n_evil)
+
     with ProcessPoolExecutor() as exe:
         for p, B, repeats in conditions:
             start = time.time()
