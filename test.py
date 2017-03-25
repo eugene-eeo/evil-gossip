@@ -56,11 +56,23 @@ conditions = [
     (0.1, 40, 50),
     (0.1, 50, 50),
 
-    (0.2, 10, 50),
-    (0.2, 20, 50),
-    (0.2, 30, 50),
-    (0.2, 40, 50),
-    (0.2, 50, 50),
+    (0.5, 10, 50),
+    (0.5, 20, 50),
+    (0.5, 30, 50),
+    (0.5, 40, 50),
+    (0.5, 50, 50),
+
+    (0.9, 10, 50),
+    (0.9, 20, 50),
+    (0.9, 30, 50),
+    (0.9, 40, 50),
+    (0.9, 50, 50),
+
+    (0.99, 10, 50),
+    (0.99, 20, 50),
+    (0.99, 30, 50),
+    (0.99, 40, 50),
+    (0.99, 50, 50),
 ]
 
 
@@ -69,7 +81,9 @@ def run_simulation(params):
 
 
 def main(args):
-    if not args['--no-header']:
+    debug = args['--debug']
+    show_header = not args['--no-header']
+    if show_header:
         dump(['p', 'B', 'immediate', 'ok'])
     with ProcessPoolExecutor() as exe:
         for p, B, repeats in conditions:
@@ -80,10 +94,11 @@ def main(args):
                 ))
             for is_immediate, ok in results:
                 dump([p, B, is_immediate, ok])
-            end = time.time()
-            dt = end - start
-            sys.stderr.write('p=%r B=%r t=%r\n' % (p, B, dt))
-            sys.stderr.flush()
+            if debug:
+                end = time.time()
+                dt = end - start
+                sys.stderr.write('p=%r B=%r t=%r\n' % (p, B, dt))
+                sys.stderr.flush()
 
 
 if __name__ == '__main__':
